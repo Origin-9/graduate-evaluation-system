@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首屏</title>
+</head>
+<body>
+<link rel="stylesheet" href="/mutual_evaluation/css/layui.css">
+<script src="/mutual_evaluation/js/layui.js"></script>
+<script src="/mutual_evaluation/js/g2.min.js"></script>
+<script src="/mutual_evaluation/js/data-set.min.js"></script>
+<script src="/mutual_evaluation/js/jquery-3.3.1.min.js"></script>
+<!--全局主题-->
+<script>
+    const {Global} = G2; // 获取 Global 全局对象
+    Global.setTheme('default'); // 传入值为 'default'、'dark' 的一种，如果不是，那么使用 default 主题。
+</script>
+<style>
+    body {
+        /*background: linear-gradient(-90deg, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, .87) 100%);*/
+        /*background-color: rgba(0, 0, 0, .88);*/
+        /*background-color: #2f4050;*/
+    }
+</style>
+
+
+<div class="layui-row">
+    <div class="layui-col-xs5">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">历年平均分</blockquote>
+        <div id="mountNode"></div>
+    </div>
+    <div class="layui-col-xs7">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">历年各指标平均分</blockquote>
+        <div id="mountNode1" style="margin: 20px"></div>
+    </div>
+</div>
+
+
+<script>
+ let jsonObj;
+    window.onload = () => {
+        $.ajax({
+            url: "/system/mainEdge/personalScore",
+            async: false,
+            dataType: 'json',
+            crossDomain: true,
+            success: (data) => {
+                jsonObj = JSON.parse(data.data);
+                let _DataSet = DataSet,
+                    DataView = _DataSet.DataView;
+                let  _G = G2,
+                    Chart = _G.Chart;
+                let  ages = ['创新知识平均分', '创新素养平均分', '创新能力平均分', '总成绩平均分'];
+                let  dv = new DataView();
+                dv.source(jsonObj).transform({
+                    type: 'fold',
+                    fields: ages,
+                    key: 'age',
+                    value: 'population',
+                    retains: ['term']
+                }).transform({
+                    type: 'map',
+                    callback: function callback(obj) {
+                        var key = obj.age;
+                        var type = void 0;
+                        if (key === '创新知识平均分') {
+                            type = 'a';
+                        } else if (key === '创新素养平均分') {
+                            type = 'b';
+                        } else if (key === '创新能力平均分') {
+                            type = 'c';
+                        } else {
+                            type = 'd';
+                        }
+                        obj.type = type;
+                        return obj;
+                    }
+                });
+                var colorMap = {
+                    'averageA': '#86E6C8',
+                    'averageB': '#36CFC9',
+                    'averageC': '#209BDD',
+                    'averageD': '#1581E6',
+
+                };
+                var chart = new Chart({
+                    container: 'mountNode1',
+                    forceFit: true,
+                    height: window.innerHeight-200 ,
+                    padding: [20, 160, 80, 60]
+                });
+                chart.source(dv, {
+                    population: {
+                        tickInterval: 100
+                    }
+                });
+                chart.axis('population', {
+                    label: {
+                        formatter: function formatter(val) {
+                            return val + '分';
+                        }
+                    }
+                });
+                chart.legend({
+                    position: 'right'
+                });
+                chart.interval().position('term*population').color('age', function (age) {
+                    return colorMap[age];
+                }).tooltip('age*population', function (age, population) {
+                    return {
+                        name: age,
+                        value: population
+                    };
+                }).adjust([{
+                    type: 'dodge',
+                    dodgeBy: 'type', // 按照 type 字段进行分组
+                    marginRatio: 0 // 分组中各个柱子之间不留空隙
+                }, {
+                    type: 'stack'
+                }]);
+                chart.render();
+
+
+                var chart2 = new G2.Chart({
+                    container: 'mountNode',
+                    forceFit: true,
+                    height: window.innerHeight-200,
+                });
+                chart2.source(jsonObj);
+                chart2.coord('polar');
+                chart2.legend({
+                    position: 'bottom-center',
+
+                });
+                chart2.axis(false);
+                chart2.interval().position('term*总成绩平均分').color('term', G2.Global.colors_pie_16).style({
+                    lineWidth: 1,
+                    stroke: '#fff'
+                });
+                chart2.render();
+
+
+
+            }
+        });
+    };
+</script>
+
+</body>
+</html>

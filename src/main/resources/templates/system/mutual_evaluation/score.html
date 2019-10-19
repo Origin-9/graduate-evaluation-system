@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看成绩分布</title>
+</head>
+<body>
+<link rel="stylesheet" href="/mutual_evaluation/css/layui.css">
+<script src="/mutual_evaluation/js/layui.js"></script>
+<script src="/mutual_evaluation/js/g2.min.js"></script>
+<script src="/mutual_evaluation/js/data-set.min.js"></script>
+<script src="/mutual_evaluation/js/jquery-3.3.1.min.js"></script>
+<!--全局主题-->
+<script>
+    const {Global} = G2; // 获取 Global 全局对象
+    Global.setTheme('default'); // 传入值为 'default'、'dark' 的一种，如果不是，那么使用 default 主题。
+
+</script>
+<style>
+    body {
+        /*background-color:  rgba(0, 0, 0, .88);*/
+        /*background-color: #2f4050;*/
+    }
+</style>
+
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend style="font-size: 32px;">应用型创新能力评价一览</legend>
+</fieldset>
+
+<div class="layui-row">
+    <div class="layui-col-xs12">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">成绩趋势图
+        </blockquote>
+        <div id="qushi"></div>
+    </div>
+
+    <div class="layui-col-xs6">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">创新素养(40%)
+        </blockquote>
+        <div id="suyang"></div>
+    </div>
+    <div class="layui-col-xs6">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">创新知识(30%)
+        </blockquote>
+        <div id="zhishi"></div>
+    </div>
+    <div class="layui-col-xs12">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">创新能力(30%)
+        </blockquote>
+        <div id="nengli"></div>
+    </div>
+    <div class="layui-col-xs6">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">我的成绩</blockquote>
+        <div id="chengji"></div>
+    </div>
+    <div class="layui-col-xs6">
+        <blockquote class="layui-elem-quote layui-bg-black" style="margin: 20px ; font-size: 15px">成绩占比</blockquote>
+        <div id="zhanbi"></div>
+    </div>
+
+</div>
+
+<script>
+//我的成绩
+
+    let jsonObj;
+
+    window.onload = () => {
+        $.ajax({
+            url: "/system/mutual_evaluation/personalScore",
+            async: false,
+            dataType: 'json',
+            crossDomain: true,
+            success: (data) => {
+                // console.log(data);
+                // console.log(data.is_EvaluationCompleted);
+                // console.log(typeof data.is_EvaluationCompleted);
+                if (data.is_EvaluationCompleted === 0) {
+                    alert('未互评完，不能查看成绩！');
+                    parent.parent.$.modal.closeLoading();
+                    parent.document.getElementsByClassName('tabCloseCurrent')[0].click();
+                }else {
+                    jsonObj = JSON.parse(data.data);
+                    // console.log(jsonObj);
+                    <!--创新素养-->
+                    const suyang = [{
+                        name: '开拓精神',
+                        value: jsonObj.a1
+                    }, {
+                        name: '学习毅力',
+                        value: jsonObj.a2
+                    }, {
+                        name: '交流沟通',
+                        value: jsonObj.a3
+                    }, {
+                        name: '心态积极',
+                        value: jsonObj.a4
+                    }, {
+                        name: '责任心',
+                        value: jsonObj.a5
+                    }, {
+                        name: '探索精神',
+                        value: jsonObj.a6
+                    }, {
+                        name: '果敢决断 ',
+                        value: jsonObj.a7
+                    }, {
+                        name: '演绎推理',
+                        value: jsonObj.a8
+                    }, {
+                        name: '感染力',
+                        value: jsonObj.a9
+                    }, {
+                        name: '发散思维',
+                        value: jsonObj.a10
+                    }];
+                    const chart = new G2.Chart({
+                        container: 'suyang',
+                        forceFit: true,
+                        height: 400,
+                        padding: [20, 20, 50, 30]
+                    });
+                    chart.source(suyang);
+                    chart.scale('value', {
+                        alias: '分数'
+                    });
+                    chart.axis('name', {
+                        label: {
+                            textStyle: {
+                                fill: '#aaaaaa'
+                            }
+                        },
+                        tickLine: {
+                            alignWithLabel: false,
+                            length: 0
+                        }
+                    });
+                    chart.axis('value', {
+                        label: null,
+                        title: {
+                            offset: 20
+                        }
+                    });
+                    chart.legend(false);
+                    chart.guide().region({
+                        start: ['start', 'max'],
+                        end: ['end', 60],
+                        style: {
+                            lineWidth: 0,
+                            fill: '#dcdcdc',
+                            fillOpacity: 0.3,
+                            stroke: '#ccc'
+                        }
+                    });
+                    chart.guide().text({
+                        top: true,
+                        position: ['end', 'max'],
+                        style: {
+                            fill: '#aaaaaa',
+                            textAlign: 'end',
+                            textBaseline: 'top',
+                            fontWeight: 300
+                        },
+                        offsetX: -10,
+                        offsetY: 6
+                    });
+                    chart.interval().position('name*value').opacity(1).label('value', {
+                        offset: 10,
+                        textStyle: {
+                            fill: '#595959',
+                            fontSize: 12
+                        }
+                    });
+                    chart.render();
+
+
+
+
+
+                    const zhishidata = [{
+                        name: '常用办公软件、工具的使用',
+                        value: jsonObj.c1
+                    }, {
+                        name: '中外文语言、文字表达',
+                        value: jsonObj.c2
+                    }, {
+                        name: '基础物理、数学知识的掌握',
+                        value: jsonObj.c3
+                    }, {
+                        name: '计算机编程／ 嵌入式编程',
+                        value: jsonObj.c4
+                    }, {
+                        name: '电路分析与设计',
+                        value: jsonObj.c5
+                    }, {
+                        name: '建模与分析工具的掌握',
+                        value: jsonObj.c6
+                    }, {
+                        name: '控制系统开发与调试',
+                        value: jsonObj.c7
+                    }, {
+                        name: '撰写学术论文,报告',
+                        value: jsonObj.c8
+                    }];
+                    const chart2 = new G2.Chart({
+                        container: 'zhishi',
+                        forceFit: true,
+                        height: 400,
+                        padding: [20, 20, 50, 30]
+                    });
+                    chart2.source(zhishidata);
+                    chart2.scale('value', {
+                        alias: '分数'
+                    });
+                    chart2.axis('name', {
+                        label: {
+                            textStyle: {
+                                fill: '#aaaaaa'
+                            }
+                        },
+                        tickLine: {
+                            alignWithLabel: false,
+                            length: 0
+                        }
+                    });
+                    chart2.axis('value', {
+                        label: null,
+                        title: {
+                            offset: 20
+                        }
+                    });
+                    chart2.legend(false);
+                    chart2.guide().region({
+                        start: ['start', 'max'],
+                        end: ['end', 60],
+                        style: {
+                            lineWidth: 0,
+                            fill: '#dcdcdc',
+                            fillOpacity: 0.3,
+                            stroke: '#ccc'
+                        }
+                    });
+                    chart2.guide().text({
+                        top: true,
+                        position: ['end', 'max'],
+                        style: {
+                            fill: '#aaaaaa',
+                            textAlign: 'end',
+                            textBaseline: 'top',
+                            fontWeight: 300
+                        },
+                        offsetX: -10,
+                        offsetY: 6
+                    });
+                    chart2.interval().position('name*value').opacity(1).label('value', {
+                        offset: 10,
+                        textStyle: {
+                            fill: '#595959',
+                            fontSize: 12
+                        }
+                    });
+                    chart2.render();
+
+
+                    // <!--创新能力-->
+                    const chuangxindata = [{
+                        type: '创新应用',
+                        value: jsonObj.b1,
+                        cat: '实践创新能力'
+                    }, {
+                        type: '学科竞赛',
+                        value: jsonObj.b2,
+                        cat: '实践创新能力'
+                    }, {
+                        type: '社会实践',
+                        value: jsonObj.b3,
+                        cat: '实践创新能力'
+                    }, {
+                        type: '学术论文',
+                        value: jsonObj.b4,
+                        cat: '知识创新能力'
+                    }, {
+                        type: '科研项目',
+                        value: jsonObj.b5,
+                        cat: '知识创新能力'
+                    }, {
+                        type: '学术会议',
+                        value: jsonObj.b6,
+                        cat: '学术交流能力'
+                    }, {
+                        type: '项目管理经验',
+                        value: jsonObj.b7,
+                        cat: '组织协调能力'
+                    }, {
+                        type: '主观评价',
+                        value: jsonObj.b8,
+                        cat: '组织协调能力'
+                    }, {
+                        type: '资料查阅',
+                        value: jsonObj.b9,
+                        cat: '基础创新能力'
+                    }, {
+                        type: '课程成绩',
+                        value: jsonObj.b10,
+                        cat: '基础创新能力'
+                    }];
+
+                    const chart3 = new G2.Chart({
+                        container: 'nengli',
+                        forceFit: true,
+                        height: 200,
+                        padding: 'auto'
+                    });
+                    chart3.source(chuangxindata);
+                    chart3.scale('value', {
+                        alias: '占比（%）'
+                    });
+                    chart3.axis('type', {
+                        label: {
+                            textStyle: {
+                                fill: '#aaaaaa'
+                            }
+                        },
+                        tickLine: {
+                            alignWithLabel: false,
+                            length: 0
+                        }
+                    });
+
+                    chart3.axis('value', {
+                        label: {
+                            textStyle: {
+                                fill: '#aaaaaa'
+                            },
+                            formatter: function formatter(text) {
+                                return text.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+                            }
+                        },
+                        title: {
+                            offset: 70
+                        }
+                    });
+                    chart3.legend(false);
+                    chart3.interval().position('type*value').color('cat').opacity(1);
+                    //guide
+                    chart3.guide().text({
+                        top: true,
+                        position: ['学科竞赛', 'min'],
+                        content: '实践创新能力',
+                        style: {
+                            fill: '#c0c0c0', // 文本颜色
+                            fontSize: 12, // 文本大小
+                            fontWeight: '300',
+                            textAlign: 'center'
+                        },
+                        offsetY: 40
+                    });
+                    chart3.guide().text({
+                        top: true,
+                        position: ['学术论文', 'min'],
+                        content: '知识创新能力',
+                        style: {
+                            fill: '#c0c0c0', // 文本颜色
+                            fontSize: 12, // 文本大小
+                            fontWeight: '300',
+                            textAlign: 'center'
+                        },
+                        offsetY: 40,
+                        offsetX: 90
+                    });
+                    chart3.guide().text({
+                        top: true,
+                        position: ['学术会议', 'min'],
+                        content: '学术交流能力',
+                        style: {
+                            fill: '#c0c0c0', // 文本颜色
+                            fontSize: 12, // 文本大小
+                            fontWeight: '300'
+                        },
+                        offsetY: 40,
+                        offsetX: -35
+                    });
+                    chart3.guide().text({
+                        top: true,
+                        position: ['项目管理经验', 'min'],
+                        content: '组织协调能力',
+                        style: {
+                            fill: '#c0c0c0', // 文本颜色
+                            fontSize: 12, // 文本大小
+                            fontWeight: '300'
+                        },
+                        offsetY: 40,
+                        offsetX: 60
+                    });
+                    chart3.guide().text({
+                        top: true,
+                        position: ['资料查阅', 'min'],
+                        content: '基础创新能力',
+                        style: {
+                            fill: '#c0c0c0', // 文本颜色
+                            fontSize: 12, // 文本大小
+                            fontWeight: '300'
+                        },
+                        offsetY: 40,
+                        offsetX: 60
+                    });
+
+                    chart3.guide().line({
+                        start: ['30%', '100%'],
+                        end: ['30%', '120%'],
+                        lineStyle: {
+                            stroke: '#d9d9d9',
+                            lineDash: [0, 0]
+                        }
+                    });
+                    chart3.guide().line({
+                        start: ['50%', '100%'],
+                        end: ['50%', '120%'],
+                        lineStyle: {
+                            stroke: '#d9d9d9',
+                            lineDash: [0, 0]
+                        }
+                    });
+                    chart3.guide().line({
+                        start: ['60%', '100%'],
+                        end: ['60%', '120%'],
+                        lineStyle: {
+                            stroke: '#d9d9d9',
+                            lineDash: [0, 0]
+                        }
+                    });
+                    chart3.guide().line({
+                        start: ['80%', '100%'],
+                        end: ['80%', '120%'],
+                        lineStyle: {
+                            stroke: '#d9d9d9',
+                            lineDash: [0, 0]
+                        }
+                    });
+
+                    chart3.render();
+
+                    <!--成绩占比-->
+
+                    const zhanbidata = [{
+                        item: '创新素养',
+                        count: 80,
+                        percent: 0.4
+                    }, {
+                        item: '创新能力',
+                        count: 87,
+                        percent: 0.3
+                    }, {
+                        item: '创新知识',
+                        count: 92,
+                        percent: 0.3
+                    }];
+                    const chart4 = new G2.Chart({
+                        container: 'zhanbi',
+                        forceFit: true,
+                        height: 300
+                    });
+                    chart4.source(zhanbidata, {
+                        percent: {
+                            formatter: function formatter(count) {
+                                count = count * 100 + '%';
+                                return count;
+                            }
+                        }
+                    });
+                    chart4.coord('theta');
+                    chart4.tooltip({
+                        showTitle: false
+                    });
+                    chart4.intervalStack().position('percent').color('item').label('percent', {
+                        offset: -40,
+                        // autoRotate: false,
+                        textStyle: {
+                            textAlign: 'center',
+                            shadowBlur: 2,
+                            shadowColor: 'rgba(0, 0, 0, .45)'
+                        }
+                    }).tooltip('item*percent', function (item, count) {
+                        count = count * 100 + '%';
+                        return {
+                            name: item,
+                            value: count
+                        };
+                    }).style({
+                        lineWidth: 1,
+                        stroke: '#fff'
+                    });
+                    chart4.render();
+
+                    // 我的成绩
+                    const suyanggrades = (jsonObj.a1+jsonObj.a2+jsonObj.a3+jsonObj.a4+jsonObj.a5+jsonObj.a6+jsonObj.a7+jsonObj.a8+jsonObj.a9+jsonObj.a10)/10;
+                    const nenglirades = (jsonObj.b1*0.5+jsonObj.b2*0.3+jsonObj.b3*0.2)*0.3+(jsonObj.b4*0.6+jsonObj.b5*0.4)*0.2+
+                        (jsonObj.b6)*0.15+(jsonObj.b7+jsonObj.b8)*0.5*0.15+(jsonObj.b9*0.2+jsonObj.b10*0.8)*0.2;
+                    const zhishigrades = (jsonObj.c1+jsonObj.c2+jsonObj.c3+jsonObj.c4+jsonObj.c5+jsonObj.c6+jsonObj.c7+jsonObj.c8)*0.125;
+
+                    const mygrades = [{
+                        type: '综合成绩',
+                        grades: jsonObj.scores
+                    }, {
+                        type: '创新知识',
+                        grades: zhishigrades
+                    }, {
+                        type: '创新能力',
+                        grades: nenglirades
+                    }, {
+                        type: '创新素养',
+                        grades: suyanggrades
+                    }];
+                    const chart5 = new G2.Chart({
+                        container: 'chengji',
+                        forceFit: true,
+                        height: 300
+                    });
+                    chart5.source(mygrades);
+                    chart5.axis('grades', {
+                        label: {
+                            offset: 12
+                        }
+                    });
+                    chart5.coord().transpose();
+                    chart5.interval().position('type*grades');
+                    chart5.render();
+
+
+                    const TICKS = [""];
+                    const  qushi = [
+                        {
+                            "date": "开拓精神",
+                            "grades": jsonObj.a1
+                        },
+                        {
+                            "date": "学习毅力",
+                            "grades": jsonObj.a2
+                        },
+                        {
+                            "date": "交流沟通",
+                            "grades": jsonObj.a3
+                        },
+                        {
+                            "date": "心态积极",
+                            "grades": jsonObj.a4
+                        },
+                        {
+                            "date": "责任心",
+                            "grades": jsonObj.a5
+                        },{
+                            "date": "探索精神",
+                            "grades": jsonObj.a6
+                        },
+                        {
+                            "date": "果敢决断",
+                            "grades": jsonObj.a7
+                        },
+                        {
+                            "date": "演绎推理",
+                            "grades": jsonObj.a8
+                        },
+                        {
+                            "date": "感染力",
+                            "grades": jsonObj.a9
+                        },
+                        {
+                            "date": "发散思维",
+                            "grades": jsonObj.a10
+                        },
+                        {
+                            "date": "创新应用",
+                            "grades": jsonObj.b1
+                        },
+                        {
+                            "date": "学科竞赛",
+                            "grades": jsonObj.b2
+                        },
+                        {
+                            "date": "社会实践",
+                            "grades": jsonObj.b3
+                        },
+                        {
+                            "date": "学术论文",
+                            "grades": jsonObj.b4
+                        },
+                        {
+                            "date": "科研项目",
+                            "grades": jsonObj.b5
+                        },
+                        {
+                            "date": "学术会议",
+                            "grades": jsonObj.b6
+                        },
+                        {
+                            "date": "项目管理经验",
+                            "grades": jsonObj.b7
+                        },
+                        {
+                            "date": "主观评价",
+                            "grades": jsonObj.b8
+                        },
+                        {
+                            "date": "资料查阅",
+                            "grades": jsonObj.b9
+                        },
+                        {
+                            "date": "课程成绩",
+                            "grades": jsonObj.b10
+                        },
+                        {
+                            "date": "常用办公软件、工具的使用",
+                            "grades": jsonObj.c1
+                        },
+                        {
+                            "date": "中外文语言、文字表达",
+                            "grades": jsonObj.c2
+                        },
+                        {
+                            "date": "基础物理、数学知识的掌握",
+                            "grades": jsonObj.c3
+                        },
+                        {
+                            "date": "计算机编程／嵌入式编程",
+                            "grades": jsonObj.c4
+                        },
+                        {
+                            "date": "电路分析与设计",
+                            "grades": jsonObj.c5
+                        },
+                        {
+                            "date": "建模与分析工具的掌握",
+                            "grades": jsonObj.c6
+                        },
+                        {
+                            "date": "控制系统开发与调试",
+                            "grades": jsonObj.c7
+                        },
+                        {
+                            "date": "撰写学术论文,报告",
+                            "grades": jsonObj.c8
+                        }
+                    ];
+                    const chart6 = new G2.Chart({
+                        container: 'qushi',
+                        forceFit: true,
+                        height: 400,
+                        padding: [50, 20, 50, 20]
+                    });
+                    chart6.source(qushi, {
+                        date: {
+                            ticks: TICKS
+                        }
+                    });
+                    chart6.legend(false);
+                    chart6.axis('grades', false);
+                    chart6.axis('date', {
+                        label: {
+                            textStyle: {
+                                fill: '#aaaaaa'
+                            }
+                        }
+                    });
+                    chart6.line().position('date*grades');
+                    chart6.point().position('date*grades').size('date', function() {
+
+                        return 3;
+                    }).label('date*grades', function(date, grades) {
+
+                    }, {
+                        textStyle: {
+                            fill: '#7a7a7a',
+                            fontSize: 12,
+                            stroke: 'white',
+                            lineWidth: 2,
+                            fontWeight: 300
+                        }
+                    }).style({
+                        lineWidth: 2
+                    });
+                    chart6.render();
+
+
+
+                }
+
+
+            },
+            error: () => {
+                console.log('服务器错啦～！');
+            }
+        });
+
+    };
+</script>
+
+</body>
+</html>
