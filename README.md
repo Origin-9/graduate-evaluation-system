@@ -1,6 +1,6 @@
 ## 平台简介
 
-该平台为郑州轻工业大学电气信息工程学院使用，作者 [Ori](https://github.com/Origin-9) 和 [Junking](https://github.com/827652549)
+该平台为郑州轻工业大学电气信息工程学院使用，作者 [Ori](https://github.com/Origin-9)、[Junking](https://github.com/827652549)和[PeppaPig2000](https://github.com/PeppaPig2000)
 
 技术栈:
 * SpringBoot
