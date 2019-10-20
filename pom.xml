@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ori</groupId>
-	<artifactId>ori</artifactId>
+	<artifactId>graduate-evaluation-system</artifactId>
 	<version>3.3.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 
 	<parent>
@@ -44,16 +44,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<!--
+
 			 <exclusions>
                 <exclusion>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
-             -->
-		</dependency>
 
+		</dependency>
 		<!-- SpringBoot 测试 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
