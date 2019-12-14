@@ -46,7 +46,7 @@ public interface AverageScoreMapper {
     void updateAverageScore(AverageScore averageScore);
 
     /**
-     * 新学期第一个同学产看成绩后，在 平局分表中 插入新学期
+     * 新学期第一个同学查看成绩后，在 平局分表中 插入新学期
      * @param term
      */
     @Insert("INSERT INTO averagescore (term) values (#{term})")

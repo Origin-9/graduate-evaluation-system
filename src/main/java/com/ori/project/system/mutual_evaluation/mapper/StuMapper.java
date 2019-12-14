@@ -141,8 +141,8 @@ public interface StuMapper {
      * @param school
      * @return
      */
-    @Select("select * from personalscore where id = #{id} and school = #{school}")
-    StuScore findScore(@Param("id") String id, @Param("school") String school);
+    @Select("select * from personalscore where id = #{id} and school = #{school} and term = #{term}")
+    StuScore findScore(@Param("id") String id, @Param("school") String school, @Param("term") String term);
 
     /**
      * 查询该学生所处学期

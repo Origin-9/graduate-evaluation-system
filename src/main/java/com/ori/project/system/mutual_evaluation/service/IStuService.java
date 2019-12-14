@@ -21,7 +21,7 @@ public interface IStuService {
     public String findGroup(String id, String school);
 
     @Transactional
-    public StuScore findScore(String id, String school);
+    public StuScore findScore(String id, String school,String term);
 
     @Transactional
     public int is_EvaluationCompleted(String group, String id, String school, String grade,String term);

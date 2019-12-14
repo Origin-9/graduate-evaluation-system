@@ -52,5 +52,5 @@ public interface UploadExcelMapper {
     int findRole_id(@Param("role_name") String role_name);
     //1
     @Select("select dept_id from sys_dept where dept_name = #{dept_name}")
-    int findDept_id(@Param("dept_name") String dept_name);
+    Integer findDept_id(@Param("dept_name") String dept_name);
 }

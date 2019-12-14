@@ -79,7 +79,7 @@
 				<form id="uploadForm" enctype="multipart/form-data" style="padding: 0;" class="btn">
 					<a href="javascript:;" class="btn btn-info" style="float: left">
 						<i class="fa fa-upload"></i>导入
-						<input id="fileSelect" class="btn btn-info"  type="file" name="file" onchange="uploadFun()" STYLE="  position: absolute;
+						<input id="fileSelect" class="btn btn-info"  type="file" name="file" onchange="console.log('触发onchange');uploadFun();" STYLE="  position: absolute;
     width: 80px;
     height: 40px;
     font-size: 100px;
@@ -114,10 +114,14 @@
 			}).done(function(res) {
 				console.log(res);
 				alert(res.message);
-
+				document.getElementById('fileSelect').value='';
 			}).fail(function(res) {
 				alert('导入失败！');
+				document.getElementById('fileSelect').value='';
 			});
+
+
+
 		};
 		var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];

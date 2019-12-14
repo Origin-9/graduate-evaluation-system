@@ -114,7 +114,7 @@ public class StudentController {
         ObjectMapper mapper = new ObjectMapper(); //转换器
         Man man = (Man)session.getAttribute("man");
         ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
-        StuScore stuScore = iStuService.findScore(man.getId(),man.getSchool());
+        StuScore stuScore = iStuService.findScore(man.getId(),man.getSchool(),man.getTerm());
         if(stuScore!=null){
             String json=mapper.writeValueAsString(stuScore); //将对象转换成json
 
@@ -129,7 +129,7 @@ public class StudentController {
                 //互评完成且成绩表中没数据
                 iStuService.UpdateScore(man);
 
-                StuScore stuScore1 = iStuService.findScore(man.getId(),man.getSchool());
+                StuScore stuScore1 = iStuService.findScore(man.getId(),man.getSchool(),man.getTerm());
 
                 String json=mapper.writeValueAsString(stuScore1); //将对象转换成json
                 mav.addObject("is_EvaluationCompleted",1);

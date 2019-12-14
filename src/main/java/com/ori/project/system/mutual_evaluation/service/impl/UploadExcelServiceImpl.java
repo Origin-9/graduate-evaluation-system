@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 /**
+ *
  * 导入 excel Service层处理
  * @author : Ori
  * @date : 2019/10/9
@@ -60,6 +61,8 @@ public class UploadExcelServiceImpl implements IUploadExcelService {
 
             }
         }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             return e.getMessage();
         }
         return "导入成功";
@@ -82,8 +85,12 @@ public class UploadExcelServiceImpl implements IUploadExcelService {
         try {
             for (Student student : arrayList) {
                 String role_name = student.getSchool() + student.getDepartment() + student.getIdentity();
-                int dept_id = uploadExcelMapper.findDept_id(role_name);
-                int role_id = uploadExcelMapper.findRole_id(role_name);
+
+                Integer dept_id = uploadExcelMapper.findDept_id(role_name);
+
+                Integer role_id = uploadExcelMapper.findRole_id(role_name);
+                if(dept_id == null || role_id == null)
+                    continue;
                 uploadExcelMapper.insertTea(student);
 
 
@@ -100,6 +107,7 @@ public class UploadExcelServiceImpl implements IUploadExcelService {
 
             }
         }catch (Exception e){
+            e.printStackTrace();
             return e.getMessage();
         }
 

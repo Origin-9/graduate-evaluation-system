@@ -121,4 +121,15 @@ public interface UserMapper
      * @return 结果
      */
     public User checkEmailUnique(String email);
+
+    public String selectLoginameById(Long userId);
+
+    public int findTea(String username);
+    public int findStu(String username);
+
+    public void deleteTeaByUsername(String username);
+    public void deleteStuByUsername(String username);
+
+    public void deleteUser_RoleByIds(Long[] ids);
+
 }

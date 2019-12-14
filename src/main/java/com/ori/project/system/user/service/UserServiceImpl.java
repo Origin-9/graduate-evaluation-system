@@ -165,6 +165,7 @@ public class UserServiceImpl implements IUserService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
+    @Transactional
     @Override
     public int deleteUserByIds(String ids) throws BusinessException
     {
@@ -176,6 +177,17 @@ public class UserServiceImpl implements IUserService
                 throw new BusinessException("不允许删除超级管理员用户");
             }
         }
+        ArrayList<String> list = new ArrayList<String>();
+        for(Long userId : userIds){
+            String username = userMapper.selectLoginameById(userId);
+            if(userMapper.findTea(username) == 1){
+                userMapper.deleteTeaByUsername(username);
+            }
+            else if (userMapper.findStu(username)  == 1){
+                userMapper.deleteStuByUsername(username);
+            }
+        }
+        userMapper.deleteUser_RoleByIds(userIds);
         return userMapper.deleteUserByIds(userIds);
     }
 

@@ -48,8 +48,8 @@ public class StuServiceImpl implements IStuService {
     }
 
     @Override
-    public StuScore findScore(String id, String school) {
-        return stuMapper.findScore(id,school);
+    public StuScore findScore(String id, String school,String term) {
+        return stuMapper.findScore(id,school,term);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class StuServiceImpl implements IStuService {
 
         averageScore.setASum(averageScore.getASum() + a);
         averageScore.setBSum(averageScore.getBSum() + b);
-        averageScore.setCSum(averageScore.getBSum() + b);
+        averageScore.setCSum(averageScore.getCSum() + c);
         averageScore.setScoreSum(averageScore.getScoreSum() + calculation);
 
         averageScore.setANum(averageScore.getANum() + 1);

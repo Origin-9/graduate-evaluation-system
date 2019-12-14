@@ -67,7 +67,6 @@ public class UploadExcelController {
             //识别导入身份为学生或者老师
             if (sheet.getRow(1).getCell(0).getStringCellValue().equals("老师")) {
                 List<Student> list = new ArrayList<Student>();
-
                 for (int r = 1; r <= this.getRealRow(sheet); r++) {
                     Row row = sheet.getRow(r);
                     if (row == null) {
