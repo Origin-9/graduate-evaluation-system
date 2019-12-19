@@ -1,12 +1,18 @@
-<!DOCTYPE html>
-<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    
+
     <title>创新能力评价系统</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
+    <!-- STYLESHEETS -->
+
     <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
@@ -20,55 +26,185 @@
     <script>
         if(window.top!==window.self){window.top.location=window.location};
     </script>
+
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/plugins.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+
+
 </head>
 
-<body class="signin">
 
-    <div class="signinpanel">
-        <div class="row">
-            <div class="col-sm-7">
-                <div class="signin-info">
-                    <div class="logopanel m-b">
-                      
-                    </div>
-                    <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>电气控制类硕士研究生应用型创新能力评价系统</strong></h4>
-                    <ul class="m-b">
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> SpringBoot</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Mybatis</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Shiro</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Thymeleaf</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Bootstrap</li>
-                    </ul>
+<body>
+
+
+<!-- PRELOADER -->
+<div class="preloader">
+
+    <!-- SPINNER -->
+    <div class="spinner">
+
+        <div class="bounce-1"></div>
+        <div class="bounce-2"></div>
+        <div class="bounce-3"></div>
+
+    </div>
+    <!-- /SPINNER -->
+
+</div>
+<!-- /PRELOADER -->
+
+
+<!-- HERO -->
+<div class="hero">
+
+
+    <!-- FRONT CONTENT -->
+    <div class="front-content">
+
+
+        <!-- CONTAINER MID -->
+        <div class="container-mid">
+
+
+            <!-- ANIMATION CONTAINER -->
+            <div class="animation-container animation-fade-down" data-animation-delay="0">
+
+                <img class="img-responsive logo" src="/assets/img/logo.png" alt="image">
+
+            </div>
+            <!-- /ANIMATION CONTAINER -->
+
+
+            <!-- ANIMATION CONTAINER -->
+            <div class="animation-container animation-fade-right" data-animation-delay="300">
+
+                <h1>欢迎来到</h1>
+
+            </div>
+            <!-- /ANIMATION CONTAINER -->
+
+
+            <!-- ANIMATION CONTAINER -->
+            <div class="animation-container animation-fade-left" data-animation-delay="600">
+
+                <p class="subline" style="max-width: 28em;" >电气控制类硕士研究生应用型创新能力评价系统
+
+                </p>
+
+
+            </div>
+            <!-- /ANIMATION CONTAINER -->
+
+
+            <!-- ANIMATION CONTAINER -->
+            <div class="animation-container animation-fade-up" data-animation-delay="900">
+
+                <div class="open-popup">开始登录</div>
+
+            </div>
+            <!-- /ANIMATION CONTAINER -->
+
+
+        </div>
+        <!-- /CONTAINER MID -->
+
+
+        <!-- FOOTER -->
+        <div style="position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;">
+
+
+            <!-- ANIMATION CONTAINER -->
+            <div class="animation-container animation-fade-up" data-animation-delay="1200">
+
+                <p>© 2019 | Designed by 郑轻软创</p>
+
+            </div>
+            <!-- /ANIMATION CONTAINER -->
+
+
+        </div>
+        <!-- /FOOTER -->
+
+
+    </div>
+    <!-- /FRONT CONTENT -->
+
+
+    <!-- BACKGROUND CONTENT -->
+    <div class="background-content parallax-on">
+
+        <div class="background-overlay"></div>
+        <div class="background-img layer" data-depth="0.05"></div>
+
+    </div>
+    <!-- /BACKGROUND CONTENT -->
+
+
+</div>
+<!-- /HERO -->
+
+
+<!-- POPUP ( SUBSCRIBE ) -->
+<div class="popup">
+
+
+    <!-- CARD -->
+    <div class="card">
+
+
+        <!--                    &lt;!&ndash; CARD CLOSE BUTTON &ndash;&gt;-->
+        <div class="close-popup close-button"></div>
+
+        <!--                    <i class="fa fa-envelope-o" aria-hidden="true"></i>-->
+        <!--                    <h3>Sign Up</h3>-->
+        <!--                    <p class="subline">Signing up to our newsletter gives you exclusive access to our Website Launch!</p>-->
+
+        <!-- FORM -->
+        <h3>Sign Up</h3>
+
+        <form id="signupForm" class="subscribe-form">
+
+            <p class="m-t-md"></p>
+
+
+            <input type="text" name="username" class="form-control uname" placeholder="用户名"/>
+            <input type="password" name="password" class="form-control pword" placeholder="密码"/>
+            <div class="row m-t" th:if="${captchaEnabled==true}">
+                <div class="col-xs-6">
+                    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5"
+                           autocomplete="off">
+                </div>
+                <div class="col-xs-6">
+                    <a href="javascript:void(0);" title="点击更换验证码">
+                        <img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%"/>
+                    </a>
                 </div>
             </div>
-            <div class="col-sm-5">
-                <form id="signupForm">
-                    <h4 class="no-margins">登录：</h4>
-                    <p class="m-t-md"></p>
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名"    />
-                    <input type="password" name="password" class="form-control pword"     placeholder="密码"   />
-					<div class="row m-t" th:if="${captchaEnabled==true}">
-						<div class="col-xs-6">
-						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" autocomplete="off">
-						</div>
-						<div class="col-xs-6">
-							<a href="javascript:void(0);" title="点击更换验证码">
-								<img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%"/>
-							</a>
-						</div>
-					</div>
-                    <div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
-				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
-				    </div>
-                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
-                </form>
+            <div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
+                <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
             </div>
-        </div>
-        <div class="signup-footer">
+            <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+        </form>
+        <!-- /FORM -->
 
-        </div>
+
     </div>
+    <!-- /CARD -->
+
+
+</div>
+<!-- /POPUP ( SUBSCRIBE ) -->
+
+
+<!-- JAVASCRIPTS -->
+<script type="text/javascript" src="/assets/js/plugins.js"></script>
+<script type="text/javascript" src="/assets/js/main.js"></script>
+
+
 <script th:inline="javascript"> var ctx = [[@{/}]]; var captchaType = [[${captchaType}]]; </script>
 <!-- 全局js -->
 <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
@@ -81,4 +217,6 @@
 <script src="../static/ori/js/ry-ui.js" th:src="@{/ori/js/ry-ui.js?v=3.3.0}"></script>
 <script src="../static/ori/login.js" th:src="@{/ori/login.js}"></script>
 </body>
+
+
 </html>
