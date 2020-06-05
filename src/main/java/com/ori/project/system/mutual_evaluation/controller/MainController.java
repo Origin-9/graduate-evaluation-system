@@ -43,13 +43,13 @@ public class MainController {
             Zhanshi zhanshi = new Zhanshi();
             zhanshi.set创新素养平均分(averageScore.getAverageA());
             zhanshi.set创新能力平均分(averageScore.getAverageB());
-            zhanshi.set创新知识平均分(averageScore.getAverageB());
+            zhanshi.set创新知识平均分(averageScore.getAverageC());
             zhanshi.set总成绩平均分(averageScore.getAverageScore());
             zhanshi.setTerm(averageScore.getTerm());
             list.add(zhanshi);
         }
         ArrayList<Zhanshi> arrayList = new ArrayList<Zhanshi>();
-        for(int i = 0;i<5;i++){
+        for(int i = 0;i<4;i++){
             if(list.isEmpty())
                 continue;
             arrayList.add(list.pollFirst());
